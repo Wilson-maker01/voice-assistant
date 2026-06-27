@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">📊 ML Model Metrics</h2>
+
+<!-- Main Metrics -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card p-4 text-center">
+            <h5 class="mb-3">🎯 Accuracy</h5>
+            <div style="font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; color: #00ffff;">
+                {{ metrics.accuracy }}%
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card p-4 text-center">
+            <h5 class="mb-3">📈 F1 Score</h5>
+            <div style="font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; color: #00ff88;">
+                {{ metrics.f1_score }}%
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card p-4 text-center">
+            <h5 class="mb-3">🔍 Precision</h5>
+            <div style="font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; color: #7700ff;">
+                {{ metrics.precision }}%
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card p-4 text-center">
+            <h5 class="mb-3">🔄 Recall</h5>
+            <div style="font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; color: #ff0066;">
+                {{ metrics.recall }}%
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confusion Matrix -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card p-4">
+            <h4 class="mb-3">🗂️ Confusion Matrix</h4>
+            <hr>
+            <div class="text-center">
+                <img src="/static/confusion_matrix.png" 
+                     alt="Confusion Matrix" 
+                     class="img-fluid"
+                     style="max-width: 800px; border-radius: 10px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Per Class Metrics -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card p-4">
+            <h4 class="mb-3">📋 Per Class Metrics</h4>
+            <hr>
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Intent Class</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1 Score</th>
+                        <th>Support</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for class_name, values in metrics.classification_report.items() %}
+                        {% if class_name not in ['accuracy', 'macro avg', 'weighted avg'] %}
+                        <tr>
+                            <td style="color: #00ffff; font-family: 'Orbitron', monospace; font-size: 0.75rem;">
+                                {{ class_name | upper }}
+                            </td>
+                            <td style="color: #7700ff;">{{ (values.precision * 100) | round(2) }}%</td>
+                            <td style="color: #ff0066;">{{ (values.recall * 100) | round(2) }}%</td>
+                            <td style="color: #00ff88;">{{ (values['f1-score'] * 100) | round(2) }}%</td>
+                            <td style="color: #a0a0c0;">{{ values.support }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Model Info -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card p-4">
+            <h4 class="mb-3">🤖 Model Info</h4>
+            <hr>
+            <table class="table table-dark mb-0">
+                <tbody>
+                    <tr>
+                        <td style="color: #a0a0c0;">Algorithm</td>
+                        <td style="color: #00ffff;">Random Forest Classifier</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #a0a0c0;">Feature Extraction</td>
+                        <td style="color: #00ffff;">TF-IDF (N-grams 1-2)</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #a0a0c0;">Number of Trees</td>
+                        <td style="color: #00ffff;">100</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #a0a0c0;">Test Split</td>
+                        <td style="color: #00ffff;">20%</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #a0a0c0;">Total Classes</td>
+                        <td style="color: #00ffff;">{{ metrics.classes | length }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card p-4">
+            <h4 class="mb-3">📊 Average Metrics</h4>
+            <hr>
+            <table class="table table-dark mb-0">
+                <tbody>
+                    {% for avg_type in ['macro avg', 'weighted avg'] %}
+                    {% if avg_type in metrics.classification_report %}
+                    <tr>
+                        <td colspan="4" style="color: #00ffff; font-family: 'Orbitron', monospace; font-size: 0.75rem;">
+                            {{ avg_type | upper }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #a0a0c0;">Precision</td>
+                        <td style="color: #7700ff;">{{ (metrics.classification_report[avg_type].precision * 100) | round(2) }}%</td>
+                        <td style="color: #a0a0c0;">Recall</td>
+                        <td style="color: #ff0066;">{{ (metrics.classification_report[avg_type].recall * 100) | round(2) }}%</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #a0a0c0;">F1 Score</td>
+                        <td style="color: #00ff88;">{{ (metrics.classification_report[avg_type]['f1-score'] * 100) | round(2) }}%</td>
+                        <td style="color: #a0a0c0;">Support</td>
+                        <td style="color: #eaeaea;">{{ metrics.classification_report[avg_type].support }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mb-4">
+    <a href="/" class="btn btn-primary">← Back to Assistant</a>
+</div>
+{% endblock %} 
