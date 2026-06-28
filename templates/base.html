@@ -2,39 +2,39 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>SpeechAI - Speech to Text Assistant</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root[data-theme="dark"] {
             --bg-primary: #0f0f1a;
             --bg-secondary: #1a1a2e;
-            --bg-card: rgba(26, 26, 46, 0.9);
+            --bg-card: rgba(26, 26, 46, 0.95);
             --text-primary: #eaeaea;
             --text-secondary: #a0a0c0;
             --accent: #6c63ff;
             --accent-2: #ff6584;
             --accent-3: #43e97b;
             --border: rgba(108, 99, 255, 0.2);
-            --navbar-bg: rgba(15, 15, 26, 0.95);
+            --navbar-bg: rgba(15, 15, 26, 0.98);
             --input-bg: rgba(0, 0, 20, 0.6);
             --shadow: rgba(108, 99, 255, 0.1);
         }
 
         :root[data-theme="light"] {
-            --bg-primary: #f0f4ff;
-            --bg-secondary: #e8ecff;
-            --bg-card: rgba(255, 255, 255, 0.95);
-            --text-primary: #2d2d4e;
-            --text-secondary: #6b6b8a;
+            --bg-primary: #f5f7ff;
+            --bg-secondary: #eef0ff;
+            --bg-card: rgba(255, 255, 255, 0.98);
+            --text-primary: #1a1a2e;
+            --text-secondary: #5a5a7a;
             --accent: #6c63ff;
             --accent-2: #ff6584;
             --accent-3: #00c853;
-            --border: rgba(108, 99, 255, 0.2);
-            --navbar-bg: rgba(255, 255, 255, 0.95);
-            --input-bg: rgba(240, 244, 255, 0.8);
-            --shadow: rgba(108, 99, 255, 0.15);
+            --border: rgba(108, 99, 255, 0.15);
+            --navbar-bg: rgba(255, 255, 255, 0.98);
+            --input-bg: rgba(240, 244, 255, 0.9);
+            --shadow: rgba(108, 99, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,53 +42,56 @@
         body {
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-text-size-adjust: 100%;
         }
 
-        /* Background decoration */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background:
-                radial-gradient(ellipse at 20% 20%, rgba(108, 99, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(255, 101, 132, 0.08) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 20%, rgba(108, 99, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 101, 132, 0.06) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
         }
 
+        /* Navbar */
         .navbar {
             background: var(--navbar-bg) !important;
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 2px 20px var(--shadow);
-            position: relative;
-            z-index: 100;
-            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
         }
 
         .navbar-brand {
             color: var(--accent) !important;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-weight: 700;
-            font-size: 1.4rem;
-            letter-spacing: 0.5px;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
         }
 
         .nav-link {
             color: var(--text-secondary) !important;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            padding: 8px 16px !important;
-            border-radius: 25px;
-            margin: 0 4px;
+            padding: 6px 14px !important;
+            border-radius: 20px;
+            margin: 0 2px;
         }
 
-        .nav-link:hover {
+        .nav-link:hover, .nav-link.active {
             color: var(--accent) !important;
             background: rgba(108, 99, 255, 0.1);
         }
@@ -97,267 +100,264 @@
         .theme-toggle {
             background: rgba(108, 99, 255, 0.1);
             border: 1px solid var(--border);
-            border-radius: 25px;
+            border-radius: 20px;
             padding: 6px 14px;
             cursor: pointer;
             color: var(--text-primary);
-            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 6px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
+            white-space: nowrap;
         }
 
         .theme-toggle:hover {
             background: rgba(108, 99, 255, 0.2);
-            transform: translateY(-2px);
         }
 
+        /* Container */
         .container {
             position: relative;
             z-index: 1;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
+        /* Cards */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 16px;
             box-shadow: 0 4px 20px var(--shadow);
             animation: fadeInUp 0.4s ease;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px var(--shadow);
-            border-color: rgba(108, 99, 255, 0.4);
+            box-shadow: 0 6px 25px var(--shadow);
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Buttons */
         .btn-primary {
-            background: linear-gradient(135deg, #6c63ff, #9c63ff);
+            background: var(--accent);
             border: none;
             color: #ffffff;
             font-weight: 600;
             padding: 10px 24px;
-            border-radius: 25px;
+            border-radius: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
             font-size: 0.9rem;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #9c63ff, #6c63ff);
-            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.5);
-            transform: translateY(-2px);
+        .btn-primary:hover, .btn-primary:active {
+            background: #5a52d5;
             color: #ffffff;
+            transform: translateY(-1px);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ff6584, #ff4757);
+            background: var(--accent-2);
             border: none;
             font-weight: 600;
-            border-radius: 25px;
+            border-radius: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 101, 132, 0.3);
             font-size: 0.9rem;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .btn-danger:hover {
-            box-shadow: 0 6px 20px rgba(255, 101, 132, 0.5);
-            transform: translateY(-2px);
+        .btn-danger:hover, .btn-danger:active {
+            background: #e05070;
+            transform: translateY(-1px);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            background: var(--accent-3);
             border: none;
             color: #0a0a1a;
             font-weight: 600;
-            border-radius: 25px;
+            border-radius: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);
             font-size: 0.9rem;
         }
 
-        .btn-success:hover {
-            box-shadow: 0 6px 20px rgba(67, 233, 123, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .form-control {
+        /* Form Controls */
+        .form-control, .form-select {
             background: var(--input-bg);
             border: 1px solid var(--border);
             color: var(--text-primary);
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 12px 16px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
+            -webkit-appearance: none;
         }
 
-        .form-control:focus {
+        .form-control:focus, .form-select:focus {
             background: var(--input-bg);
             border-color: var(--accent);
             color: var(--text-primary);
             box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+            outline: none;
         }
 
-        .form-control::placeholder { color: var(--text-secondary); }
+        .form-control::placeholder { color: var(--text-secondary); opacity: 0.7; }
 
-        h2 {
-            color: var(--accent) !important;
-            font-family: 'Poppins', sans-serif;
+        /* Typography */
+        h1, h2 {
+            color: var(--text-primary) !important;
+            font-family: 'Inter', sans-serif;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        h4, h5 {
-            color: var(--accent) !important;
-            font-family: 'Poppins', sans-serif;
+        h3, h4, h5 {
+            color: var(--text-primary) !important;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
-            font-size: 1rem;
         }
 
-        p { color: var(--text-secondary); }
-        a { color: var(--accent); text-decoration: none; transition: all 0.3s ease; }
-        a:hover { color: var(--accent-2); }
-        hr { border-color: var(--border) !important; }
+        p { color: var(--text-secondary); line-height: 1.6; }
+        a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
+        a:hover { color: #5a52d5; }
+        hr { border-color: var(--border) !important; margin: 16px 0; }
 
+        /* Tables */
         .table td, .table th {
             border-color: var(--border);
             color: var(--text-secondary);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
+            padding: 12px 16px;
+            font-size: 0.9rem;
         }
 
         .table thead th {
             color: var(--accent);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .table tbody tr:hover {
-            background: rgba(108, 99, 255, 0.05);
+            background: rgba(108, 99, 255, 0.04);
         }
 
-        /* Pill badges */
+        /* Badge */
         .intent-badge {
-            background: rgba(108, 99, 255, 0.15);
+            background: rgba(108, 99, 255, 0.12);
             color: var(--accent);
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             letter-spacing: 0.5px;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
-
-        /* Mic pulse animation */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(108, 99, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
-        }
-
-        .mic-pulse {
-            animation: pulse 1.5s infinite;
+            text-transform: uppercase;
         }
 
         /* Response box */
         .response-box {
-            background: rgba(108, 99, 255, 0.05);
+            background: rgba(108, 99, 255, 0.04);
             border: 1px solid var(--border);
-            border-left: 4px solid var(--accent);
+            border-left: 3px solid var(--accent);
             border-radius: 12px;
             padding: 16px;
         }
 
-        /* Note item */
-        .note-item {
-            background: rgba(108, 99, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .note-item:hover {
-            border-color: rgba(108, 99, 255, 0.4);
-            background: rgba(108, 99, 255, 0.1);
-        }
-
-        /* History item */
-        .history-item {
+        /* Note and History items */
+        .note-item, .history-item {
             background: rgba(108, 99, 255, 0.03);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 12px;
-            margin-bottom: 10px;
-            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            transition: border-color 0.2s ease;
         }
 
-        .history-item:hover {
+        .note-item:hover, .history-item:hover {
             border-color: rgba(108, 99, 255, 0.3);
         }
 
-        /* Stat card */
-        .stat-card {
-            text-align: center;
-            padding: 24px;
-        }
-
+        /* Stat cards */
+        .stat-card { text-align: center; padding: 20px 16px; }
         .stat-number {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.8rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 2.4rem;
             font-weight: 700;
             line-height: 1;
+            letter-spacing: -1px;
         }
-
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
             color: var(--text-secondary);
             margin-top: 8px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; opacity: 0.5; }
+
+        /* Mic pulse animation */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(108, 99, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0); }
+        }
+        .mic-pulse { animation: pulse 1.5s infinite; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .navbar-brand { font-size: 1.1rem; }
+            .card { border-radius: 12px; }
+            .stat-number { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem !important; }
+            .btn { font-size: 0.85rem; padding: 9px 18px; }
+            .container { padding-left: 12px; padding-right: 12px; }
+            .theme-toggle span:last-child { display: none; }
         }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-           <a class="navbar-brand" href="/">
-          🎤 Speech<span style="color: var(--accent-2);">AI</span>
-          </a>
-            <div class="navbar-nav ms-auto d-flex align-items-center">
-                <a class="nav-link" href="/">Assistant</a>
-                <a class="nav-link" href="/metrics">ML Metrics</a>
-                <button class="theme-toggle ms-2" onclick="toggleTheme()">
+            <a class="navbar-brand" href="/">SpeechAI</a>
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <a class="nav-link d-none d-md-block" href="/">Assistant</a>
+                <a class="nav-link d-none d-md-block" href="/metrics">ML Metrics</a>
+                <button class="theme-toggle" onclick="toggleTheme()">
                     <span id="themeIcon">☀️</span>
                     <span id="themeText">Light</span>
                 </button>
             </div>
+            <!-- Mobile nav -->
+            <div class="d-flex d-md-none gap-2 ms-2">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/metrics">Metrics</a>
+            </div>
         </div>
     </nav>
 
-    <div class="container mt-4 pb-4">
+    <div class="container mt-3 pb-4">
         {% block content %}{% endblock %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Theme toggle
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
@@ -368,7 +368,6 @@
             document.getElementById('themeText').textContent = next === 'dark' ? 'Light' : 'Dark';
         }
 
-        // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.getElementById('themeIcon').textContent = savedTheme === 'dark' ? '☀️' : '🌙';

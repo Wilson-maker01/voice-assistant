@@ -79,10 +79,28 @@ def process_command(text):
 
     elif intent == 'date':
         now = datetime.datetime.now()
-        response = f"Today is {now.strftime('%A, %B %d, %Y')}"
+        tomorrow = now + datetime.timedelta(days=1)
+        yesterday = now - datetime.timedelta(days=1)
+        last_week = now - datetime.timedelta(weeks=1)
+        next_week = now + datetime.timedelta(weeks=1)
+
+        if 'tomorrow' in text_lower:
+            response = f"Tomorrow's date is {tomorrow.strftime('%A, %B %d, %Y')}"
+        elif 'yesterday' in text_lower:
+            response = f"Yesterday was {yesterday.strftime('%A, %B %d, %Y')}"
+        elif 'last week' in text_lower:
+            response = f"Last week's date was {last_week.strftime('%A, %B %d, %Y')}"
+        elif 'next week' in text_lower:
+            response = f"Next week's date will be {next_week.strftime('%A, %B %d, %Y')}"
+        else:
+            response = f"Today is {now.strftime('%A, %B %d, %Y')}"
 
     elif intent == 'search':
-        query = text_lower.replace('search for', '').replace('search', '').replace('look up', '').replace('find', '').strip()
+        query = text_lower
+        for word in ['search for', 'search', 'look up', 'find information about',
+                     'google search for', 'search the web for', 'look for',
+                     'find me', 'find']:
+            query = query.replace(word, '').strip()
         action = 'search'
         action_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
         response = f"Searching Google for: {query}"
@@ -101,32 +119,30 @@ def process_command(text):
             response = "Which website would you like to open?"
 
     elif intent == 'take_note':
-        note_text = text_lower.replace('take note', '').replace('note down', '').replace('remember', '').replace('make a note', '').replace('write down', '').strip()
+        note_text = text_lower
+        for word in ['take note', 'note down', 'remember to', 'remember',
+                     'make a note', 'write down', 'note to self', 'note this']:
+            note_text = note_text.replace(word, '').strip()
         notes.append({
-            'text': note_text,
+            'text': note_text or text,
             'time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         })
-        response = f"Note saved: {note_text}"
+        response = f"Note saved: {note_text or text}"
 
     elif intent == 'weather':
-        response = "I can't check live weather right now, but you can say 'open google' and search for weather!"
+        response = "I cannot check live weather right now, but you can say 'open google' and search for weather!"
 
     elif intent == 'joke':
         response = random.choice(jokes)
 
+    elif intent == 'identity':
+        response = "I am SpeechAI, a Speech to Text Assistant powered by Machine Learning. I can recognize your voice commands and respond accordingly!"
+
     elif intent == 'help':
-        response = """Here's what I can do:
-        🗣️ Greet you
-        ⏰ Tell the time and date
-        🔍 Search Google
-        🌐 Open websites
-        📝 Take notes
-        😂 Tell jokes
-        🌤️ Weather info
-        Just speak or type your command!"""
+        response = "Here is what I can do: Greet you, tell the time and date, search Google, open websites, take notes, tell jokes, and answer questions. Just speak or type your command!"
 
     else:
-        response = "I'm not sure I understood that. Try saying 'help' to see what I can do!"
+        response = "I am not sure I understood that. Try saying 'help' to see what I can do!"
 
     return {
         'intent': intent,
@@ -135,6 +151,7 @@ def process_command(text):
         'action': action,
         'action_url': action_url
     }
+    
 
 @app.route('/')
 def index():

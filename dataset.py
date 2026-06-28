@@ -119,4 +119,38 @@ data = [
     ("i need assistance", "help"),
     ("show commands", "help"),
     ("what commands are available", "help"),
+
+    # More greetings
+    ("hi there", "greeting"),
+    ("hey there", "greeting"),
+    ("hello there", "greeting"),
+    ("hi how are you", "greeting"),
+    ("hey how are you", "greeting"),
+    ("hi buddy", "greeting"),
+    ("hello friend", "greeting"),
+    ("hi assistant", "greeting"),
+    ("hello assistant", "greeting"),
+    ("hi speechai", "greeting"),
+
+    # Identity
+    ("what is your name", "identity"),
+    ("who are you", "identity"),
+    ("what are you", "identity"),
+    ("tell me your name", "identity"),
+    ("what should i call you", "identity"),
+    ("introduce yourself", "identity"),
+    ("who made you", "identity"),
+    ("what do i call you", "identity"),
+    ("are you a robot", "identity"),
+    ("are you an ai", "identity"),
+
+    # More date examples
+    ("what is tomorrow's date", "date"),
+    ("what will be tomorrow's date", "date"),
+    ("tell me tomorrow date", "date"),
+    ("what date is tomorrow", "date"),
+    ("tomorrow date please", "date"),
+    ("what was yesterday date", "date"),
+    ("what is last week date", "date"),
+    ("what is next week date", "date"),
 ] 
